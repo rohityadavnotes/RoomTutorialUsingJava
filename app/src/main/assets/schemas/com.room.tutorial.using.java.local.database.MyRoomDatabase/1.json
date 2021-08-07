@@ -1,0 +1,404 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "4130decb6eaa77a2b42bdcaa8c4df066",
+    "entities": [
+      {
+        "tableName": "school",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`school_id` TEXT NOT NULL, `school_type` TEXT, `school_name` TEXT, `created_at` INTEGER, `updated_at` INTEGER, `street` TEXT, `state` TEXT, `city` TEXT, `post_code` INTEGER, PRIMARY KEY(`school_id`))",
+        "fields": [
+          {
+            "fieldPath": "schoolId",
+            "columnName": "school_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "schoolType",
+            "columnName": "school_type",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "schoolName",
+            "columnName": "school_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "created_at",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updated_at",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address.street",
+            "columnName": "street",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address.state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address.city",
+            "columnName": "city",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "address.postCode",
+            "columnName": "post_code",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "school_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "principal",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`principal_id` TEXT NOT NULL, `first_name` TEXT, `last_name` TEXT, `p_school_id` TEXT, PRIMARY KEY(`principal_id`), FOREIGN KEY(`p_school_id`) REFERENCES `school`(`school_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "principalId",
+            "columnName": "principal_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "first_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "last_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "schoolId",
+            "columnName": "p_school_id",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "principal_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_principal_p_school_id",
+            "unique": true,
+            "columnNames": [
+              "p_school_id"
+            ],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_principal_p_school_id` ON `${TABLE_NAME}` (`p_school_id`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "school",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "p_school_id"
+            ],
+            "referencedColumns": [
+              "school_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "teacher",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`teacher_id` TEXT NOT NULL, `first_name` TEXT, `last_name` TEXT, `t_school_id` TEXT, PRIMARY KEY(`teacher_id`), FOREIGN KEY(`t_school_id`) REFERENCES `school`(`school_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "teacherId",
+            "columnName": "teacher_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "first_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "last_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "schoolId",
+            "columnName": "t_school_id",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "teacher_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "school",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "t_school_id"
+            ],
+            "referencedColumns": [
+              "school_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "subject",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`subject_id` TEXT NOT NULL, `subject_name` TEXT, `subject_code` TEXT, `sub_teacher_id` TEXT, PRIMARY KEY(`subject_id`), FOREIGN KEY(`sub_teacher_id`) REFERENCES `teacher`(`teacher_id`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "subjectId",
+            "columnName": "subject_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subjectName",
+            "columnName": "subject_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "subjectCode",
+            "columnName": "subject_code",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "teacherId",
+            "columnName": "sub_teacher_id",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "subject_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": [
+          {
+            "table": "teacher",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "sub_teacher_id"
+            ],
+            "referencedColumns": [
+              "teacher_id"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "student",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`roll_number` TEXT NOT NULL, `first_name` TEXT, `last_name` TEXT, `study_in_class` TEXT, `email` TEXT, `phone_number` TEXT, `school_id` TEXT, PRIMARY KEY(`roll_number`))",
+        "fields": [
+          {
+            "fieldPath": "rollNumber",
+            "columnName": "roll_number",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "first_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "last_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "studyInClass",
+            "columnName": "study_in_class",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "phoneNumber",
+            "columnName": "phone_number",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "schoolId",
+            "columnName": "school_id",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "roll_number"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "teacher_student_join",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`teacher_id` TEXT NOT NULL, `roll_number` TEXT NOT NULL, PRIMARY KEY(`teacher_id`, `roll_number`), FOREIGN KEY(`teacher_id`) REFERENCES `teacher`(`teacher_id`) ON UPDATE CASCADE ON DELETE CASCADE , FOREIGN KEY(`roll_number`) REFERENCES `student`(`roll_number`) ON UPDATE CASCADE ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "teacherId",
+            "columnName": "teacher_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rollNumber",
+            "columnName": "roll_number",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "teacher_id",
+            "roll_number"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_teacher_student_join_teacher_id_roll_number",
+            "unique": false,
+            "columnNames": [
+              "teacher_id",
+              "roll_number"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_teacher_student_join_teacher_id_roll_number` ON `${TABLE_NAME}` (`teacher_id`, `roll_number`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "teacher",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "teacher_id"
+            ],
+            "referencedColumns": [
+              "teacher_id"
+            ]
+          },
+          {
+            "table": "student",
+            "onDelete": "CASCADE",
+            "onUpdate": "CASCADE",
+            "columns": [
+              "roll_number"
+            ],
+            "referencedColumns": [
+              "roll_number"
+            ]
+          }
+        ]
+      },
+      {
+        "tableName": "user",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` TEXT NOT NULL, `first_name` TEXT, `last_name` TEXT, `age` TEXT, PRIMARY KEY(`user_id`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "firstName",
+            "columnName": "first_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastName",
+            "columnName": "last_name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "age",
+            "columnName": "age",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "user_id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_user_user_id",
+            "unique": false,
+            "columnNames": [
+              "user_id"
+            ],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_user_user_id` ON `${TABLE_NAME}` (`user_id`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4130decb6eaa77a2b42bdcaa8c4df066')"
+    ]
+  }
+}
